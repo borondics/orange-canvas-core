@@ -331,6 +331,13 @@ class SchemeEditWidget(QWidget):
             triggered=self.openSelected,
             enabled=False
         )
+        self.__switchChannelNamesAction = QAction(
+            self.tr("Switch Channel Names"), self,
+            objectName="switch-channel-names",
+            toolTip=self.tr("Switch Channel Names"),
+            triggered=self.switchChannelNames,
+            enabled=False
+        )
         self.__removeSelectedAction = QAction(
             self.tr("Remove"), self,
             objectName="remove-selected",
@@ -423,7 +430,8 @@ class SchemeEditWidget(QWidget):
             self.__linkResetAction,
             self.__duplicateSelectedAction,
             self.__copySelectedAction,
-            self.__pasteAction
+            self.__pasteAction,
+            self.__switchChannelNamesAction
         ])
 
         # Actions which should be disabled while a multistep
@@ -1082,6 +1090,13 @@ class SchemeEditWidget(QWidget):
             raise NoWorkflowError()
         command = commands.RemoveAnnotationCommand(self.__scheme, annotation)
         self.__undoStack.push(command)
+
+    def switchChannelNames(self):
+        """
+        Switches channel names between widgets displayed on the links
+        """
+
+        CanvasScene.set_channel_names_visible(not CanvasScene.channel_names_visible())
 
     def removeSelected(self):
         # type: () -> None
